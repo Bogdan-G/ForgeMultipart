@@ -150,10 +150,16 @@ object MultipartMixinFactory extends ASMMixinFactory(classOf[TileMultipart])
         def methods(cnode:ClassNode):Map[String, MethodNode] =
         {
             val m = cnode.methods.map(m => (m.name+m.desc, m)).toMap
+            try {
             if(cnode.interfaces != null)
                 m++cnode.interfaces.flatMap(i => methods(classNode(i)))
             else
                 m
+            } catch {
+                case e: NullPointerException => {
+                    m
+                }
+            }
         }
 
         def generatePassThroughMethod(m:MethodNode)

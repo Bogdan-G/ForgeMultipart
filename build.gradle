@@ -2,6 +2,7 @@
 buildscript {
     repositories {
         mavenCentral()
+        mavenLocal()
         maven {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
@@ -18,6 +19,14 @@ buildscript {
 
 //add dependency repositories
 repositories {
+    mavenLocal()
+    maven {
+        url  "http://jcenter.bintray.com"
+    }
+    maven {
+        name 'Forge'
+        url 'http://files.minecraftforge.net/maven'
+    }
     maven {
         name = "chickenbones"
         url = "http://chickenbones.net/maven"
@@ -27,6 +36,9 @@ repositories {
 // Apply the forge plugin - this adds all the magic for automatically obfuscating, deobfuscating etc
 apply plugin: 'scala'
 apply plugin: 'forge'
+
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
 
 // This is our group
 group = "codechicken" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -47,7 +59,8 @@ dependencies {
     compile "codechicken:NotEnoughItems:${config.mc_version}-${config.nei_version}:dev"
 }
 
-version =  "${project.config.mod_version}." + System.getenv("BUILD_NUMBER") ?: "1"
+//version =  "${project.config.mod_version}." + System.getenv("BUILD_NUMBER") ?: "1"
+version =  "${project.config.mod_version}." + "347"
 
 println  config.mc_version + "-" + config.forge_version
 // Setup the forge minecraft plugin data. Specify the preferred forge/minecraft version here
@@ -67,9 +80,10 @@ jar {
     }
 
 }
+//sourceSets.main.scala{srcDirs project.projectDir.getPath() include("src/main/java/**")}
 sourceSets {
     main {
-        def root = project.projectDir.parentFile
+        def root = project.projectDir
         scala {
             srcDir new File(root, "src")
         }
@@ -119,7 +133,7 @@ artifacts {
 }
 
 // Configure an upload task. this is setup for uploading to files.minecraftforge.net. There are other examples around
-uploadArchives {
+/*uploadArchives {
     dependsOn 'reobf'
     repositories {
         if (project.hasProperty("filesmaven")) {
@@ -182,4 +196,4 @@ uploadArchives {
             }
         }
     }
-}
+}*/
